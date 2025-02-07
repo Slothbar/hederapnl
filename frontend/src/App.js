@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { HashConnect } from "hashconnect";
+import { HashConnect } from "@hashgraph/hashconnect";
 
 const API_BASE_URL = "https://hederapnl.onrender.com"; // Replace with your Render backend URL
 
