@@ -1,7 +1,3 @@
-// === Step 1: Backend Setup ===
-// This is the backend for your Hedera P&L Tracker
-// Deploy this on Render after pushing to GitHub
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -48,52 +44,3 @@ app.get('/prices/:tokenId', async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`✅ Backend running on port ${PORT}`));
-
-// === Step 2: Frontend Setup ===
-// This is the frontend React app for your Hedera P&L Tracker
-// Ensure this is in the /frontend/src directory before pushing to GitHub
-
-import { useState, useEffect } from "react";
-import { HashConnect } from "hashconnect";
-
-const API_BASE_URL = "https://your-backend.onrender.com"; // Replace with your Render backend URL
-
-function App() {
-  const [accountId, setAccountId] = useState(null);
-  const [tokens, setTokens] = useState([]);
-  const hashConnect = new HashConnect();
-
-  async function connectWallet() {
-    const appMetaData = {
-      name: "Hedera P&L Tracker",
-      description: "Track your Hedera token profits and losses",
-      icon: "https://youriconurl.com"
-    };
-
-    const initData = await hashConnect.init(appMetaData, "mainnet", true);
-    hashConnect.connectToLocalWallet();
-    const connectedAccount = initData.pairingData.accountIds[0];
-    setAccountId(connectedAccount);
-    fetchBalances(connectedAccount);
-  }
-
-  async function fetchBalances(accountId) {
-    const response = await fetch(`${API_BASE_URL}/balances/${accountId}`);
-    const data = await response.json();
-    setTokens(data.tokens);
-  }
-
-  return (
-    <div>
-      <h1>Hedera P&L Tracker</h1>
-      {accountId ? <p>Connected: {accountId}</p> : <button onClick={connectWallet}>Connect Wallet</button>}
-      <ul>
-        {tokens.map(token => (
-          <li key={token.token_id}>{token.token_id} - Balance: {token.balance}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default App;
